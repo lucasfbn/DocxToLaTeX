@@ -1,0 +1,1 @@
+from docx_to_latex.docx_latex_converter import DocxToLaTeX
