@@ -21,7 +21,7 @@ class LaTex:
     def __init__(self, tex_template_path, path_pdf_out=None):
         self.tex_template_path = None
         self.tex_template_path_dir = None
-        self.path_pdf_out = None
+        self.path_pdf_out = path_pdf_out
 
         self._handle_dirs(tex_template_path)
 
@@ -57,7 +57,9 @@ class LaTex:
             loader=jinja2.FileSystemLoader(self.tex_template_path_dir))
 
     def generate_tex_file(self, parse_dict, save_rendered_tex=False):
-        template = self._jinja2_env.get_template(str(self.tex_template_path))
+
+        tex_template_filename = str(self.tex_template_path).split(".")[1]
+        template = self._jinja2_env.get_template(tex_template_filename)
         self.rendered_tex = template.render(p=parse_dict)
 
         if save_rendered_tex:

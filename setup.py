@@ -7,8 +7,8 @@ setup(
   description = 'Docx to LaTeX converter.',   # Give a short description about your library
   author = 'Lucas Fobian',                   # Type in your name
   # author_email = 'your.email@domain.com',      # Type in your E-Mail
-  # url = 'https://github.com/user/reponame',   # Provide either the link to your github or to your website
-  # download_url = 'https://github.com/user/reponame/archive/v_01.tar.gz',    # I explain this later on
+  url = 'https://github.com/lucasfbn/DocxToLaTeX',   # Provide either the link to your github or to your website
+  download_url = 'https://github.com/lucasfbn/DocxToLaTeX/archive/v_01.tar.gz',    # I explain this later on
   keywords = ["word", "docx", "latex", "convert"],   # Keywords that define your package best
   install_requires=[            # I get to this in a second
           'docx2txt',
