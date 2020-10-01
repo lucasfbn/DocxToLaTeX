@@ -60,7 +60,10 @@ class LaTex:
     def generate_tex_file(self, parse_dict, save_rendered_tex=False):
 
         tex_template_filename = re.findall(r'\\(\w*)\.', str(self.tex_template_path))[0]
-        template = self._jinja2_env.get_template(tex_template_filename)
+        tex_template_fileending = str(self.tex_template_path).split(".")[1]
+        tex_template_file = tex_template_filename + tex_template_fileending
+
+        template = self._jinja2_env.get_template(tex_template_file)
         self.rendered_tex = template.render(p=parse_dict)
 
         if save_rendered_tex:
