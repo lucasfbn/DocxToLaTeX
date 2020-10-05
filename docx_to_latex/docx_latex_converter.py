@@ -1,9 +1,12 @@
+from pathlib import Path
+
 from docx_to_latex.docx import Docx
 from docx_to_latex.latex import LaTex
 
+
 class DocxToLaTeX:
 
-    def __init__(self, docx_path, tex_template_path ,pdf_out_path = None, save_rendered_template = False):
+    def __init__(self, docx_path, tex_template_path, pdf_out_path=None, save_rendered_template=False):
         self.docx_in_path = docx_path
         self.tex_template_path = tex_template_path
         self.pdf_out_path = pdf_out_path
@@ -16,7 +19,6 @@ class DocxToLaTeX:
         return Docx(self.docx_in_path).parse()
 
     def add_custom_key_val(self, key, val):
-
         if key in self.parse_dict:
             raise ValueError("You used the same tag twice.")
 

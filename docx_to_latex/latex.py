@@ -10,15 +10,6 @@ import jinja2
 
 class LaTex:
 
-    # def __init__(self, tex_template_path, path_pdf_out=None):
-    #     self.tex_template_path = None
-    #     self.tex_template_path_dir = None
-    #     self.path_pdf_out = None
-    #
-    #     self._handle_dirs(tex_template_path)
-    #
-    #     self._jinja2_env = self._load_jinja2_env()
-
     def __init__(self, tex_template_path, path_pdf_out=None):
         self.tex_template_path = None
         self.tex_template_path_dir = None
@@ -30,7 +21,9 @@ class LaTex:
         self.rendered_tex = None
 
     def _handle_dirs(self, tex_template_path):
-        self.tex_template_path = Path(tex_template_path)
+
+        if type(tex_template_path) is str:
+            self.tex_template_path = Path(tex_template_path).absolute()
 
         # Get parent dir of input file
         self.tex_template_path_dir = self.tex_template_path.parent.absolute()
@@ -44,6 +37,9 @@ class LaTex:
             self.path_pdf_out = Path(temp)
 
     def _load_jinja2_env(self):
+        """
+        Define jinja2 environment
+        """
         return jinja2.Environment(
             block_start_string='\BLOCK{',
             block_end_string='}',

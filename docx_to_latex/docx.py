@@ -3,7 +3,6 @@ import docx2txt
 
 
 class Docx:
-
     start_tag = "<"
     end_tag = ">"
 
@@ -24,20 +23,29 @@ class Docx:
 
         parse_dict = {}
 
+        # Finds all matches between tags
         for match in re.finditer(r'<(.*)>(.|\n)*?</\1>', self.doc):
 
             text = match.group()
 
-            # Find entry key like {test} but NOT {\test}
+            # Find entry key like <test> but NOT <\test>
             key = re.search(r'<[^/].*>', text).group()
-            # Removes "{" and "}"
+            # Removes "<" and ">" from key
             key = re.sub(r'([<>])', "", key)
-            # Get text between tags
 
             if key in parse_dict:
                 raise ValueError("You used the same tag twice.")
 
-            parse_dict[key] = re.sub(r'<.*>', "", text).replace("\n", "").replace('\r', '').strip()
+            # Removes tags from body
+            body = re.sub(r'<.*>', "", text)
+
+            # Remove \n and \r from start and end of body
+            body = body.strip("\n")
+            body = body.strip("\r")
+
+            # Within paragraphs we convert the newlines to "tex newlines" (\\)
+            body = body.replace("\n\n", "\\\\")
+
+            parse_dict[key] = body
 
         return parse_dict
-
