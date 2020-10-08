@@ -37,10 +37,10 @@ class TestCompileTex(unittest.TestCase):
         l = LaTex("test.tex")
         parse_dict = {"one": "testcase one", "second": "testcase two"}
         l.generate_tex_file(parse_dict, save_rendered_tex=False)
-        l.compile()
+        l.compile("pdflatex")
         assert os.path.exists(l.tex_template_path_dir / "test.pdf") is True
 
-        os.remove(l.tex_template_path_dir / "test.pdf")
+        # os.remove(l.tex_template_path_dir / "test.pdf")
 
 
 if __name__ == '__main__':

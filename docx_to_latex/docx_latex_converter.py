@@ -24,7 +24,7 @@ class DocxToLaTeX:
 
         self.parse_dict[key] = val
 
-    def convert(self):
+    def convert(self, engine: str = "pdflatex"):
         l = LaTex(self.tex_template_path, self.pdf_out_path)
         l.generate_tex_file(parse_dict=self.parse_dict, save_rendered_tex=self._save_rendered_template)
-        l.compile()
+        l.compile(engine)

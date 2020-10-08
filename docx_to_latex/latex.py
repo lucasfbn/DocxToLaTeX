@@ -67,11 +67,23 @@ class LaTex:
             with open(self.tex_template_path_dir / "rendered.tex", "w+", encoding="utf-8") as f:
                 f.write(self.rendered_tex)
 
-    def compile(self):
+    def compile(self, engine: str):
+        """
+        Compiles a .tex file to pdf.
+        :param engine:  Possible values: "pdflatex" or "latexmk".
+                        Type of engine to use. Pdflatex is default, however, if you want things like a table
+                        of contents or use a bibliography you need to run LaTeX more than once or even programs
+                        in between - latexmk takes care of this.
+                        Also see https://mg.readthedocs.io/latexmk.html.
+        :return:
+        """
+
+        if engine not in ["pdflatex", "latexmk"]:
+            raise ValueError("Invalid engine. Valid options are: 'pdflatex' or 'latexmk'.")
 
         # Create a temp dir and write the rendered tex to a temp file
         tmp_dir = tempfile.mkdtemp()
-        in_tmp_path = os.path.join(tmp_dir, 'rendered.tex')
+        in_tmp_path = os.path.join(tmp_dir, 'out.tex')
         with open(in_tmp_path, 'w+', encoding="utf-8") as outfile:
             outfile.write(self.rendered_tex)
 
@@ -80,7 +92,10 @@ class LaTex:
 
         # Compile
         out_tmp_path = os.path.join(tmp_dir, 'out.pdf')
-        p = Popen(['pdflatex', in_tmp_path, '-job-name', 'out', '-output-directory', tmp_dir])
+        if engine == "pdflatex":
+            p = Popen(['pdflatex', in_tmp_path, '-job-name', 'out', '-output-directory', tmp_dir])
+        else:
+            p = Popen(['latexmk', '-pdf', f'-outdir={tmp_dir}', in_tmp_path])
         p.communicate()
 
         # Copy out.pdf to the specified location and delete the temp dir
