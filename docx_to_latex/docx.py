@@ -46,6 +46,31 @@ class Docx:
             # Within paragraphs we convert the newlines to "tex newlines" (\\)
             body = body.replace("\n\n", "\\\\")
 
+            """
+            Using tex syntax directly before a new line will result in "\\\" instead of "\".
+            Example:
+            ipsum
+            \begin{itemize}
+            ...
+            
+            will result in:
+            ipsum
+            \\\begin{itemize}
+            ...
+            
+            which is obviously not correct.
+            We, therefore, replace these cases with their original (one) backslash. 
+            """
+            body = body.replace("\\\\\\", "\\")
+
+            """
+            If we, for instance, use a new line (in word) directly after a tex command like \end{itemize} this will
+            result in an error. We, therefore, replace these cases such that:
+            
+            \end{itemize}\\ -> \end{itemize} 
+            """
+            body = body.replace("}\\\\", "}")
+
             parse_dict[key] = body
 
         return parse_dict
