@@ -35,6 +35,8 @@ class LaTex:
             temp += ".pdf"
 
             self.path_pdf_out = Path(temp)
+        else:
+            self.path_pdf_out = Path(self.path_pdf_out).absolute()
 
     def _load_jinja2_env(self):
         """
