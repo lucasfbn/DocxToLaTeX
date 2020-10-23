@@ -19,7 +19,17 @@ class Docx:
             closing_brackets), f"Missing opening or closing brackets. Opening brackets: {len(opening_brackets)}," \
                                f" Closing brackets: {len(closing_brackets)}"
 
-    def parse(self):
+    def parse(self, convert_newlines: bool = False):
+        """
+        Parses a docx file.
+
+        :param convert_newlines:
+            Whether to convert docx newlines to tex newline (\n\n -> \\\\) or not.
+            This is not working for certain scenarios so it is disabled by default.
+        :return:
+
+        """
+
 
         parse_dict = {}
 
@@ -43,33 +53,35 @@ class Docx:
             body = body.strip("\n")
             body = body.strip("\r")
 
-            # Within paragraphs we convert the newlines to "tex newlines" (\\)
-            body = body.replace("\n\n", "\\\\")
+            if convert_newlines:
 
-            """
-            Using tex syntax directly before a new line will result in "\\\" instead of "\".
-            Example:
-            ipsum
-            \begin{itemize}
-            ...
-            
-            will result in:
-            ipsum
-            \\\begin{itemize}
-            ...
-            
-            which is obviously not correct.
-            We, therefore, replace these cases with their original (one) backslash. 
-            """
-            body = body.replace("\\\\\\", "\\")
+                # Within paragraphs we convert the newlines to "tex newlines" (\\)
+                body = body.replace("\n\n", "\\\\")
 
-            """
-            If we, for instance, use a new line (in word) directly after a tex command like \end{itemize} this will
-            result in an error. We, therefore, replace these cases such that:
-            
-            \end{itemize}\\ -> \end{itemize} 
-            """
-            body = body.replace("}\\\\", "}")
+                """
+                Using tex syntax directly before a new line will result in "\\\" instead of "\".
+                Example:
+                ipsum
+                \begin{itemize}
+                ...
+                
+                will result in:
+                ipsum
+                \\\begin{itemize}
+                ...
+                
+                which is obviously not correct.
+                We, therefore, replace these cases with their original (one) backslash. 
+                """
+                body = body.replace("\\\\\\", "\\")
+
+                """
+                If we, for instance, use a new line (in word) directly after a tex command like \end{itemize} this will
+                result in an error. We, therefore, replace these cases such that:
+                
+                \end{itemize}\\ -> \end{itemize} 
+                """
+                body = body.replace("}\\\\", "}")
 
             parse_dict[key] = body
 
