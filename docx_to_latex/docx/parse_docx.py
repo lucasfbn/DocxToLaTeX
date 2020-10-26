@@ -4,7 +4,7 @@ from docx import Document
 class ParseDocx:
 
     def __init__(self, path):
-        self.doc = Document('files/test.docx')
+        self.doc = Document(path)
 
     def parse(self):
         text = []
