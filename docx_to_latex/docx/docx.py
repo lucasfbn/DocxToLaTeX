@@ -1,5 +1,5 @@
 import re
-import docx2txt
+from docx_to_latex.docx.parse_docx import ParseDocx
 
 
 class Docx:
@@ -7,7 +7,7 @@ class Docx:
     end_tag = ">"
 
     def __init__(self, path):
-        self.doc = docx2txt.process(path)
+        self.doc = ParseDocx(path).parse()
         self._validate()
 
     def _validate(self):
@@ -29,7 +29,6 @@ class Docx:
         :return:
 
         """
-
 
         parse_dict = {}
 
@@ -54,7 +53,6 @@ class Docx:
             body = body.strip("\r")
 
             if convert_newlines:
-
                 # Within paragraphs we convert the newlines to "tex newlines" (\\)
                 body = body.replace("\n\n", "\\\\")
 

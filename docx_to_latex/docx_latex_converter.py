@@ -1,6 +1,4 @@
-from pathlib import Path
-
-from docx_to_latex.docx import Docx
+from docx_to_latex.docx.docx import Docx
 from docx_to_latex.latex import LaTex
 
 
