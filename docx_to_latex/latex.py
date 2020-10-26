@@ -79,7 +79,7 @@ class LaTex:
         self.rendered_tex = template.render(p=parse_dict)
 
         # Second iteration
-        with open(self.tex_template_path_dir / "rendered_0.tex", "w+") as f:
+        with open(self.tex_template_path_dir / "rendered_0.tex", "w+", encoding="utf-8") as f:
             f.write(self.rendered_tex)
         template = self._jinja2_env.get_template("rendered_0.tex")
         self.rendered_tex = template.render(p=parse_dict)
