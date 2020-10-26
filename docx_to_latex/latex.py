@@ -56,18 +56,40 @@ class LaTex:
             loader=jinja2.FileSystemLoader(self.tex_template_path_dir))
 
     def generate_tex_file(self, parse_dict, save_rendered_tex=False):
+        """
+        Generates a tex file the tex template and the parse dict.
+        Runs twice. First iteration is to parse the content given by the keys of the tex template.
+        Second iteration is to parse the content given by the keys from WITHIN the docx file.
+        (For instance: \VAR{p["test"] in docx, added by custom later on)
+
+        :param parse_dict:
+        :type parse_dict:
+        :param save_rendered_tex:
+        :type save_rendered_tex:
+        :return:
+        :rtype:
+        """
 
         tex_template_filename = re.findall(r'\\(\w*)\.', str(self.tex_template_path))[0]
         tex_template_fileending = str(self.tex_template_path).split(".")[1]
         tex_template_file = tex_template_filename + "." + tex_template_fileending
 
+        # First iteration
         template = self._jinja2_env.get_template(tex_template_file)
+        self.rendered_tex = template.render(p=parse_dict)
+
+        # Second iteration
+        with open(self.tex_template_path_dir / "rendered_0.tex", "w+") as f:
+            f.write(self.rendered_tex)
+        template = self._jinja2_env.get_template("rendered_0.tex")
         self.rendered_tex = template.render(p=parse_dict)
 
         if save_rendered_tex:
             print(self.tex_template_path_dir / "rendered.tex")
             with open(self.tex_template_path_dir / "rendered.tex", "w+", encoding="utf-8") as f:
                 f.write(self.rendered_tex)
+        else:
+            os.remove(self.tex_template_path_dir / "rendered_0.tex")
 
     def compile(self, engine: str):
         """
