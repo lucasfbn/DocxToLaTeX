@@ -23,4 +23,4 @@ class ParseDocx:
 
             text.append("".join(para_text))
 
-        return "\n".join(text)
+        return "\n\n".join(text)
